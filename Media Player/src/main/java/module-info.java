@@ -2,7 +2,9 @@ module com.example.demo {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.media;
-
+    requires java.sql;
+    requires mysql.connector.j;
+    requires java.desktop;
 
 
     opens com.example.demo to javafx.fxml;
