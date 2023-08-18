@@ -1,0 +1,22 @@
+#impo{
+    -fx-font-family: "Arial Black";
+
+}
+#pauseMedia{
+    -fx-font-size: 20px;
+}
+#playButton{
+    -fx-font-size: 20px;
+}
+#resetMedia{
+    -fx-font-size: 20px;
+}
+#nextMedia{
+    -fx-font-size: 20px;
+}
+#pane{
+    -fx-background-color: #0e150f;
+}
+#myListView{
+    -fx-background-color: antiquewhite;
+}
