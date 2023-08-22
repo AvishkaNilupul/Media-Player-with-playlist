@@ -38,7 +38,7 @@
             <Font size="27.0" />
          </font>
       </Button>
-      <Slider layoutX="761.0" layoutY="630.0" prefHeight="44.0" prefWidth="243.0" />
+      <Slider fx:id="volumeSlider" layoutX="761.0" layoutY="630.0" prefHeight="44.0" prefWidth="243.0" value="100.0" />
       <ListView fx:id="myListView" cacheShape="false" centerShape="false" focusTraversable="false" layoutX="66.0" layoutY="192.0" opacity="0.34" prefHeight="331.0" prefWidth="966.0" scaleShape="false" stylesheets="@app.css">
          <effect>
             <Blend />
