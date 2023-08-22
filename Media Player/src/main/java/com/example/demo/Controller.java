@@ -12,10 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -28,6 +25,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.scene.Node;
 
 
@@ -37,6 +37,7 @@ public class Controller implements Initializable {
     private Scene scene;
 
     public void login (ActionEvent event) throws IOException {
+        mediaPlayer.stop();
 
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("LogIn.fxml"));
 
@@ -65,6 +66,8 @@ public class Controller implements Initializable {
 
     @FXML
     private ProgressBar songProgressBar;
+    @FXML
+    private Slider volumeSlider;
 
     private Media media;
 
@@ -80,7 +83,10 @@ public class Controller implements Initializable {
 
     private int songNumber;
 
-    private  boolean running;
+    private Timer timer;
+    private TimerTask task;
+
+    private boolean running;
 
 
     @Override
@@ -95,6 +101,7 @@ public class Controller implements Initializable {
         files = directory.listFiles();
 
 
+
         if (files != null){
 
             for (File file : files) {
@@ -103,6 +110,9 @@ public class Controller implements Initializable {
                 media = new Media(songs.get(songNumber).toURI().toString());
 
             }
+            //for (int i = 0 ; i <songs.size();i++){
+            //   myListView.getItems().add(songs.get(i).getName());
+            //}
              myListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -128,6 +138,7 @@ public class Controller implements Initializable {
 
                     songLabel.setText(songs.get(songNumber).getName());
                     mediaPlayer.play();
+                    beginTimer();
 
                     songNumber = 1;
 
@@ -143,16 +154,49 @@ public class Controller implements Initializable {
             songLabel.setText(songs.get(songNumber).getName());
 
         }
+        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                mediaPlayer.setVolume(volumeSlider.getValue()*0.01);
+            }
+        });
 
     }
+    public void beginTimer() {
 
+        timer = new Timer();
+
+        task = new TimerTask() {
+
+            public void run() {
+
+                running = true;
+                double current = mediaPlayer.getCurrentTime().toSeconds();
+                double end = media.getDuration().toSeconds();
+                songProgressBar.setProgress(current/end);
+
+                if(current/end == 1) {
+
+                    cancelTimer();
+                }
+            }
+        };
+
+        timer.scheduleAtFixedRate(task, 0, 1000);
+    }
+
+    public void cancelTimer() {
+
+        running = false;
+        timer.cancel();
+    }
     public void playButton(){
-
+        beginTimer();
         mediaPlayer.play();
 
     }
     public void pauseMedia(){
-
+        timer.cancel();
         mediaPlayer.pause();
 
     }
@@ -163,41 +207,6 @@ public class Controller implements Initializable {
     }
 
     public void impo() throws IOException {
-
-        File filepath = null;
-
-        String MName = null;
-
-        JFileChooser fileChooser = new JFileChooser();
-
-        fileChooser.setCurrentDirectory(new File(".")); //sets current directory
-
-        int response = fileChooser.showOpenDialog(null); //select file to open
-        //int response = fileChooser.showSaveDialog(null); //select file to save
-
-        if (response == JFileChooser.APPROVE_OPTION) {
-            filepath = new File(fileChooser.getSelectedFile().getAbsolutePath());
-            MName = filepath.getName();
-
-
-        }
-        File destFile = new File("C:\\Users\\Avishka\\Documents\\Java Applications\\Media Player\\src\\main\\music\\" + MName);
-
-
-
-       FileInputStream fileInputStream = null;
-        FileOutputStream fileOutputStream = null;
-
-
-        fileInputStream = new FileInputStream(filepath);
-        fileOutputStream = new FileOutputStream(destFile);
-
-        int i = 0;
-
-        while ((i = fileInputStream.read()) !=-1){
-            fileOutputStream.write(i);
-
-        }
 
         Resume();
 
@@ -235,7 +244,8 @@ public class Controller implements Initializable {
 
         */
 
-    void Resume(){
+    void Resume() {
+
 
         myListView.getItems().clear();
 
@@ -259,19 +269,26 @@ public class Controller implements Initializable {
 
 
 
+
     }
 
 
 
-    public void test() throws IOException {
+    public void test(ActionEvent event) throws IOException {
 
-        FileReader reader = new FileReader("C:\\Users\\Avishka\\Documents\\Java Applications\\Media Player\\src\\main\\loginfo\\h.txt");
-        int data = reader.read();
-        while(data != -1) {
-            System.out.print((char)data);
-            data = reader.read();
-        }
-        reader.close();
+        //FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("importFile.fxml"));
+        //Parent root = (Parent) fxmlLoader.load();
+        //Stage stage = new Stage();
+        //stage.setScene(new Scene(root));
+        //stage.show();
+
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("importFile.fxml"));
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.centerOnScreen();
+        stage.setScene(scene);
+        stage.show();
+
 
     }
 

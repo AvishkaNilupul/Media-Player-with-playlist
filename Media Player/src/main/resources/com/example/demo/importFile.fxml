@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="696.0" prefWidth="1084.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo.ImportFile">
+   <children>
+      <Button fx:id="importbtn" layoutX="274.0" layoutY="220.0" mnemonicParsing="false" onAction="#importbtn" text="Import" />
+      <Button fx:id="Closebtn" layoutX="386.0" layoutY="220.0" mnemonicParsing="false" onAction="#Closebtn" text="Close" />
+   </children>
+</AnchorPane>
